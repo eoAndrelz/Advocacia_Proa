@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Assinatura Digital - Regulamento Interno</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 { color: #444; }
+    textarea {
+      width: 100%;
+      height: 300px;
+      margin-top: 10px;
+    }
+    .assinatura {
+      margin-top: 20px;
+    }
+    .assinatura input {
+      padding: 5px;
+      width: 100%;
+      margin-top: 5px;
+    }
+    .hashbox {
+      background-color: #f4f4f4;
+      border: 1px solid #ccc;
+      padding: 10px;
+      word-break: break-all;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Regulamento Interno de Trabalho</h1>
+<p>Resumo do documento (substitua pelo conteúdo completo real):</p>
+
+<textarea id="documento">
+REGULAMENTO INTERNO DE TRABALHO
+
+CAPÍTULO I – Da Integração no Contrato Individual de Trabalho
+Art.1º – O presente Regulamento faz parte integrante do contrato individual de trabalho...
+(Adicione aqui o restante do conteúdo completo)
+</textarea>
+
+<div class="assinatura">
+  <h2>Assinaturas</h2>
+  <label for="assinante1">José Eduardo Lins:</label>
+  <input type="text" id="assinante1" value="José Eduardo Lins" readonly>
+  <button onclick="gerarHash('assinante1')">Gerar Hash</button>
+  <div id="hash1" class="hashbox"></div>
+
+  <label for="assinante2">Ana Julia:</label>
+  <input type="text" id="assinante2" value="Ana Julia" readonly>
+  <button onclick="gerarHash('assinante2')">Gerar Hash</button>
+  <div id="hash2" class="hashbox"></div>
+
+  <label for="assinante3">Felipe Rodrigues:</label>
+  <input type="text" id="assinante3" value="Felipe Rodrigues" readonly>
+  <button onclick="gerarHash('assinante3')">Gerar Hash</button>
+  <div id="hash3" class="hashbox"></div>
+</div>
+
+<script>
+async function gerarHash(id) {
+  const nome = document.getElementById(id).value;
+  const documento = document.getElementById('documento').value;
+  const texto = documento + '\nAssinado por: ' + nome;
+
+  const encoder = new TextEncoder();
+  const data = encoder.encode(texto);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+  document.getElementById('hash' + id.slice(-1)).textContent = 'Hash SHA-256: ' + hashHex;
+}
+</script>
+
+</body>
+</html>
