@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verificador de Documento por Hash</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 2rem;
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .error {
+      color: red;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Verificador de Documento</h2>
+    <input type="text" id="hashInput" placeholder="Digite o código hash do documento" />
+    <button onclick="verificarHash()">Verificar</button>
+
+    <p>
+        Os codigos Hash dos documentos assinados pela Réu e Testemunhas são
+    </p>
+
+    <p>
+        abc123<br>
+        def456<br>
+        ghi789<br>
+        ghe489<br>
+        hre789<br>
+
+    </p>
+
+    <div>
+        <p>
+            Os documentos foram assinados por Ana Cristina, e suas testemunhas José, Ana Julia e Felipe Negreiros
+        </p>
+    </div>
+    <div id="resultado" class="result"></div>
+    <div id="erro" class="error"></div>
+  </div>
+
+  <script>
+    const documentosPorHash = {
+      "abc123": `
+
+      <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f7f7f7;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      background-color: #fff;
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #e9e9e9;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+        <h3>FICHA FUNCIONAL – ANA CRISTINA </h3>
+         <table>
+    <tr><th>EMPRESA</th><td>TechSyn</td></tr>
+    <tr><th>NOME COMPLETO</th><td>Ana Cristina da Silva</td></tr>
+    <tr><th>CARGO</th><td>Desenvolvedor FullStack</td></tr>
+    <tr><th>MATRÍCULA</th><td>01427</td></tr>
+    <tr><th>DATA DE ADMISSÃO</th><td>12/03/2021</td></tr>
+    <tr><th>SETOR</th><td>Tecnologia da Informação</td></tr>
+    <tr><th>JORNADA</th><td>Segunda a sexta, 08h às 17h</td></tr>
+    <tr><th>GESTOR IMEDIATO</th><td>Ricardo A. Martins</td></tr>
+  </table>
+
+  <div class="section-title">Eventos Funcionais</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Evento</th>
+        <th>Observações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>12/03/2021</td>
+        <td>Admissão</td>
+        <td>Processo seletivo interno, nota 9,5/10</td>
+      </tr>
+      <tr>
+        <td>01/08/2021</td>
+        <td>Elogio interno</td>
+        <td>Cumprimento antecipado de prazos fiscais</td>
+      </tr>
+      <tr>
+        <td>15/03/2022</td>
+        <td>Participação em treinamento</td>
+        <td>“Gestão de Conflitos Internos” – 100% de aproveitamento</td>
+      </tr>
+      <tr>
+        <td>10/11/2022</td>
+        <td>Promoção salarial</td>
+        <td>Reajuste por mérito</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Advertências e Suspensões</div>
+  <table>
+    <tr><th>Advertências registradas</th><td>Nenhuma</td></tr>
+    <tr><th>Suspensões disciplinares</th><td>Nenhuma</td></tr>
+  </table>
+
+  <div class="section-title">Última Avaliação de Desempenho</div>
+  <table>
+    <tr><th>Data</th><td>05/12/2023</td></tr>
+    <tr><th>Resultado</th><td>“Excelente” – destaque em organização, responsabilidade e relacionamento interpessoal.</td></tr>
+  </table>
+</p>
+        <p>Data: 09/06/2025</p>
+      `,
+      "def456": `
+        <h3>Atestado Médico</h3>
+        <p>Atesto, para os devidos fins, que a Sra. Ana Cristina da Silva, CPF nº 123.456.789-00, esteve sob meus cuidados nesta unidade de saúde e necessitou de afastamento de 2 dias (10 e 11 de abril de 2024) por motivo de quadro clínico de ansiedade com sintomas psicossomáticos.
+
+Recomendo repouso e acompanhamento psicológico.
+Atenciosamente,
+
+<p>
+    Dr. Mariana Lopes  CRM-SP 123456
+ Clínica Bem Viver – São Paulo/SP
+ Data: 10/04/2024
+
+</p> 
+</p>
+      `,
+      "ghi789": `
+        <h3>Petição inicial</h3>
+            <p>EXCELENTÍSSIMO(A) SENHOR(A) DOUTOR(A) JUIZ(A) DA VARA DO TRABALHO DE SÃO PAULO
+    ANA CRISTINA DA SILVA, brasileira, solteira, portadora do CPF nº 123.456.789-00, residente na cidade de São Paulo/SP, por seu advogado que esta subscreve, vem, com o devido respeito e acatamento, à presença de Vossa Excelência propor a presente:
+    RECLAMAÇÃO TRABALHISTA C/C NULIDADE DE JUSTA CAUSA E REINTEGRAÇÃO/INDENIZAÇÃO
+    em face de TECHSYN, pessoa jurídica fictícia, inscrita no CNPJ nº 30.894.837/0001-92, com sede na cidade de São Paulo/SP, pelos fatos e fundamentos que passa a expor:
+
+<p>
+    I – DOS FATOS
+    A Reclamante foi admitida em 12 de março de 2021, para exercer a função de Assistente Administrativa, com dedicação exemplar, conforme demonstra sua ficha funcional (doc. 01). Ao longo de mais de três anos de vínculo empregatício, nunca recebeu advertência, suspensão ou qualquer tipo de penalidade disciplinar.
+    No dia 14/05/2025, foi surpreendida com uma demissão por justa causa, sem qualquer comunicado formal ou prévio esclarecimento quanto ao motivo alegado para a penalidade máxima prevista na legislação trabalhista.
+    Além de não ter sido submetida a sindicância, não teve oportunidade de se defender de forma prévia — violando o princípio do contraditório e da ampla defesa, pilares essenciais de qualquer relação laboral justa.
+
+</p>
+<p>
+    II – DA ILEGALIDADE DA JUSTA CAUSA
+        A justa causa é a penalidade mais grave no Direito do Trabalho, exigindo prova cabal, imediatidade, proporcionalidade e gradação das penalidades. Nenhum desses requisitos foi observado pela Reclamada.
+        A Reclamante possui um histórico profissional ilibado, conforme comprovado:
+        Ficha funcional positiva e sem ocorrências disciplinares (doc. 01);
+        E-mail de elogio de seu gestor direto (doc. 02);
+        Controle de ponto sem faltas ou atrasos injustificados (doc. 03);
+        Atestado médico recente justificando eventual instabilidade emocional (doc. 04);
+        Declarações testemunhais confirmando sua postura ética e profissional (docs. 05 e 06).
+    Dessa forma, a alegação de justa causa se mostra infundada e desproporcional, devendo ser declarada nula, com as devidas repercussões legais.
+</p>
+    III – DOS PEDIDOS
+    Diante do exposto, requer-se a Vossa Excelência:
+        A declaração de nulidade da demissão por justa causa, com conversão em demissão sem justa causa;
+O pagamento de todas as verbas rescisórias devidas, como aviso-prévio, 13º proporcional, férias proporcionais + 1/3, multa de 40% do FGTS e liberação do saldo;
+Indenização por danos morais pela exposição indevida da Reclamante e falta de contraditório, no valor de R$ 5.000,00;
+Caso não seja possível a reintegração, requer o pagamento de indenização substitutiva;
+A condenação da Reclamada ao pagamento de custas e honorários advocatícios.
+Protesta-se pela produção de todas as provas em direito admitidas, especialmente documental e testemunhal.
+    <br>
+<p>
+    Termos em que,
+    Pede deferimento.
+<p>
+    São Paulo, 04/06/2025
+</p>
+    ADVOGADO André Luiz Da Silva Santos
+    OAB/SP 61.98452
+</p>
+      `,
+"ghe489": `
+<p> Assunto: Agradecimento e Reconhecimento pelo Seu Trabalho </p>
+
+
+<p>
+De: gestao@empresa.com.br <br>
+Para: ana.cristina@email.com <br>
+Data: 15 de junho de 2023<br>
+
+</p>
+<p>Prezada Ana Cristina,
+
+Gostaria de reservar um momento para expressar minha sincera gratidão pelo seu comprometimento, profissionalismo e dedicação durante o período em que esteve conosco.
+
+Ao longo da sua trajetória na empresa, você demonstrou não apenas competência técnica, mas também um comportamento ético exemplar, sempre colaborando com sua equipe de forma respeitosa e proativa. Sua postura contribuiu significativamente para um ambiente de trabalho mais leve, produtivo e harmonioso.
+</p>
+Seus esforços foram notados e valorizados por todos, e deixo aqui registrado o quanto sua presença fez a diferença para nossa equipe.
+
+Desejo que continue alcançando seus objetivos profissionais e pessoais, e que novas oportunidades venham acompanhadas de ainda mais reconhecimento.
+
+<p>Com admiração e respeito,</p>
+Ricardo <br>
+Gestor de Recursos Humanos<br>
+TechSync<br>
+gestao@empresa.com.br
+
+
+
+`,
+
+"hre789": 
+`
+<p>REGULAMENTO INTERNO DE TRABALHO</p>
+
+<p>CAPÍTULO I – MODELO DE REGULAMENTO INTERNO DE TRABALHO</p>
+
+Da Integração no Contrato Individual de Trabalho
+
+Art.1º – O presente Regulamento faz parte integrante do contrato individual de trabalho. As normas e preceitos nele contidos aplicam-se a todos os empregados, complementando os princípios gerais de direitos e deveres contidos na Consolidação das Leis do Trabalho (CLT).
+
+Parágrafo único – sua obrigatoriedade perdura o tempo de duração do contrato de trabalho, sendo assim, o empregado que assinar o seu termo de ciência, não poderá alegar seu desconhecimento.
+<br>
+<br>
+<p>CAPÍTULO II –MODELO DE REGULAMENTO INTERNO DE TRABALHO</p>
+
+Da Admissão
+
+Art. 2º – A admissão de empregado condiciona-se a exames de seleção técnica e médica e mediante apresentação dos documentos exigidos, em prazo fixado pelo empregador.
+
+---
+<br>
+<br>
+CAPÍTULO III – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Dos Deveres, Obrigações e Responsabilidades do Empregado
+
+Art. 3º – Todo empregado deve:<br>
+
+a)      Cumprir os compromissos expressamente assumidos no contrato individual de trabalho, com zelo, atenção e competência profissional;<br>
+
+b)      Obedecer às ordens e instruções emanadas de seus superiores hierárquicos;<br>
+
+c)      Sugerir medidas para maior eficiência do serviço;<br>
+
+d)     Observar a máxima disciplina no local de trabalho;<br>
+
+e)      Zelar pela boa conservação das instalações, equipamentos e máquinas, comunicando as anormalidades notadas;<br>
+
+f)       Manter na vida profissional conduta compatível com a dignidade do cargo ocupado e com a reputação do quadro de pessoal da Empresa;<br>
+
+g)      Usar os meios de identificação pessoal estabelecidos;<br>
+
+h)      Informar a área ou responsável pelos recursos humanos sobre qualquer modificação em seus dados pessoais, tais como, estado civil, militar, aumento ou redução de pessoas na família, eventual mudança de residência, etc.;<br>
+
+i)        Respeitar a honra, boa fama e integridade física de todas as pessoas com quem mantiverem contato por motivo de emprego.<br>
+
+---
+<br><br>
+CAPÍTULO IV – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Das Férias
+
+Art.4º – Cabe à Empresa fixar anualmente o período que seus empregados poderão gozar suas férias, ressalvadas as exceções previstas em Lei.
+<br><br>
+CAPÍTULO V – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Das Licenças
+
+Art. 5º – A Empresa concede  ao  empregado  licença de (exemplo) 5 dias  corridos e consecutivos (ou segue o art. 473 [CLT](http://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm)), por motivo de:<br><br>
+
+a)       Casamento;<br>
+
+b)      Falecimento de conjugue, ascendente, descendente ou dependente declarado na CTPS;<br>
+
+c)      Nascimento de filho;<br>
+
+- § 1º- O empregado deverá comunicar, por escrito à área ou responsável pelos recursos humanos da Empresa, seu casamento, com antecedência mínima de 8 dias;
+- § 2º- Em caso de morte e nascimento de filho, salvo absoluta impossibilidade, o empregado comunica o evento à área ou responsável pelos recursos humanos da Empresa no respectivo dia;
+- § 3º- Em qualquer caso, exige-se comprovação mediante prova documental.
+<br><br>
+CAPÍTULO VI – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Das Ausências, Saídas e Atrasos<br><br>
+
+Art.6º – O empregado que se atrasar ao serviço, sair antes do término da jornada ou faltar por qualquer motivo, deve justificar o fato ao superior imediato, verbalmente ou por escrito, quando solicitado.<br>
+
+- § 1°- Á empresa cabe descontar os períodos relativos a atrasos, saídas mais cedo, sem prévia autorização, faltas ao serviço e o consequente repouso semanal, excetuada as faltas e ausências legais;<br>
+- § 2°- As faltas ilegais, não justificadas perante a correspondente chefia, acarretam a aplicação das penalidades previstas no Capítulo XIII ;<br>
+- § 3°- As faltas decorrentes de doença deverão ser abonadas através de Atestado Médico fornecido pelo Serviço Médico da Empresa, ou na inexistência deste, por Médico do INSS, Médico do Convênio ou Médico Particular;<br>
+- § 4°- As solicitações de abono de faltas, somente serão aceitas, se as justificativas, com os correspondentes documentos de comprovação, forem apresentadas até 2 (dois) dias úteis após a data do início da ausência;<br>
+- § 5°- As faltas, quando não abonadas, acarretarão, além da perda do salário correspondente, a redução legal das férias, devendo ser descontadas no pagamento do salário do mês corrente, caso ocorram até o dia 20 (vinte) do mês, ou no pagamento do salário do mês subsequente, caso ocorram faltas após esta data.<br>
+
+---
+<br><br>
+CAPÍTULO VII – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Do pagamento
+
+Art.7º – A empresa paga os salários no 5º (quinto) dia útil do mês subsequente.<br>
+
+Art. 8º – O salário é depositado em conta corrente.<br>
+
+Art.9º – Eventuais erros ou diferenças são comunicados ao Departamento de Pessoal, no primeiro dia útil após o correspondente pagamento.<br>
+
+<br><br>CAPÍTULO VIII – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Dos Benefícios
+
+Art. 10º – A empresa oferece as seguintes vantagens:
+
+a)      Vale transporte, como estipulado na Lei;<br>
+
+b)      Vale refeição;<br>
+
+c)      Assistência médica conveniada, incluindo dependentes;<br>
+
+d)     Vale Home Office<br>
+
+---
+
+<br>CAPÍTULO IX – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Das Proibições
+
+Art. 11º – É expressamente proibido:
+
+a)      Ingressar ou permanecer em setores estranhos aos serviços, salvo por ordem expressa;<br>
+
+b)      Promover algazarra, brincadeiras e discussões durante a jornada de trabalho;<br>
+
+c)      Usar palavras ou gestos impróprios à moralidade e respeito, nas dependências da Empresa;<br>
+
+d)     Fumar nas instalações da Empresa;<br>
+e)      Divulgar, por qualquer meio, assunto ou fato de natureza privada da Empresa;<br>
+<br><br>
+CAPÍTULO X – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+
+Da Jornada de Trabalho
+
+Art.12º – Fica estabelecido o horário de trabalho das 08 às 17 horas, 40 horas semanais, ou seja, 120 horas mensais, com  1 hora para descanso e alimentação, de 2ª. a  6ª. feira.
+
+( pode  especificar um tempo para o café, uso de micro-ondas, etc.)
+
+**CAPÍTULO XI – MODELO DE REGULAMENTO INTERNO DE TRABALHO**
+
+Das Relações Humanas
+
+Art. 13º – Todos os empregados, sem distinção, devem colaborar, de forma eficaz à realização dos fins da Empresa.<br>
+
+Art. 14º – O sentido de equipe deve predominar na execução de tarefas à realização dos objetivos da Empresa.<br>
+
+Art. 15º – Harmonia, cordialidade, respeito e espírito de compreensão devem predominar nos contatos estabelecidos independentemente de posição hierárquica.<br>
+
+Art. 16º – A Empresa adota nas relações com os empregados os seguintes princípios:<br>
+
+– cumprir rigorosamente a legislação própria;<br>
+
+– reconhecer o mérito do empregado e premiá-lo;<br>
+
+---
+<br><br>
+**CAPÍTULO XII – MODELO DE REGULAMENTO INTERNO DE TRABALHO**
+
+Do Cartão ou Livro de <br>
+
+Art. 17º – A entrada e saída observam o horário designado.<br>
+
+Art. 18º – O Expediente é rigorosamente observado, cabendo ao empregado pessoalmente marcar o ponto no início e término da jornada, bem como os intervalos para as refeições e repouso.<br>
+
+- § 1°- É expressamente proibido marcar ponto de outrem.<br>
+- § 2°- Os eventuais enganos na marcação de ponto são comunicados imediatamente ao Departamento de RH.<br>
+
+Art. 19 º – Todos os empregados, obrigatoriamente, marcam o cartão ou assinam o livro de ponto, conforme o caso.<br><br>
+<br><br>
+CAPÍTULO XIII – MODELO DE REGULAMENTO INTERNO DE TRABALHO
+Penalidades
+<br><br>
+Art. 17º – Aos empregados transgressores das normas deste Regulamento, aplicam-se as penalidades seguintes:<br>
+
+– Advertência verbal;<br>
+
+– Advertência escrita;<br>
+
+– Suspensão; e<br>
+
+– Demissão, por justa causa.<br>
+
+Art. 18º – As penalidades são aplicadas segundo a gravidade da transgressão, pelo Departamento de Pessoal.<br>
+
+Art. 19º – As respectivas chefias elaboram relatório escrito e circunstanciado aos casos de demissão por justa causa.<br>
+<br><br>
+CAPÍTULO XIV – MODELO DE REGULAMENTO INTERNO DE TRABALHO<br><br>
+
+Das disposições Gerais
+
+Art. 20º – Os empregados devem observar o presente Regulamento, circulares, ordem de serviço, avisos, comunicados e outras instruções expedidas pela direção da Empresa.<br>
+
+Art. 21º – Cada empregado recebe um exemplar do presente Regulamento. Declara, por escrito, tê-lo recebido, lido e estar de acordo com todos os seus preceitos.<br>
+
+Art. 22º – Os casos omissos ou não previstos são resolvidos pela Empresa, à luz da CLT e legislação complementar pertinente.<br>
+
+Art. 23º – O presente regulamento pode ser substituído por outro, sempre que a Empresa julgar conveniente, em consequência de alteração na legislação social.<br>
+`,
+    };
+
+    function verificarHash() {
+      const hashDigitado = document.getElementById("hashInput").value.trim();
+      const resultado = document.getElementById("resultado");
+      const erro = document.getElementById("erro");
+
+      if (documentosPorHash[hashDigitado]) {
+        resultado.innerHTML = documentosPorHash[hashDigitado];
+        resultado.style.display = "block";
+        erro.innerText = "";
+      } else {
+        resultado.style.display = "none";
+        resultado.innerHTML = "";
+        erro.innerText = "Código hash inválido. Verifique e tente novamente.";
+      }
+    }
+  </script>
+</body>
+</html>
